@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SolarSystemMap from '../components/SolarSystemMap.vue';
+---
+
+<Layout title="XPlanets Interactive Map">
+  <main>
+    <SolarSystemMap client:only="vue" />
+  </main>
+</Layout>
+
+<style>
+  main {
+    width: 100%;
+    height: 100vh;
+  }
+</style>
