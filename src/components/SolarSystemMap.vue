@@ -6,7 +6,7 @@
 import { onMounted, ref } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { planetConfig, getCurrentPosition, getOrbitPath, getDistanceAU } from '../utils/planets';
+import { planetConfig, getCurrentPosition, getOrbitPath, getDistanceAU, getSpeedMph } from '../utils/planets';
 
 const selectedPlanet = ref<string | null>(null);
 const markerMap = new Map<string, L.CircleMarker>();
@@ -63,9 +63,10 @@ onMounted(() => {
       className: `planet-marker planet-${p.id}`
     }).addTo(map);
 
-    // HTML tooltip showing name and period
+    // HTML tooltip showing name, period, distance, and speed
     const distanceAU = getDistanceAU(p.body, now);
-    const tooltipContent = `<div style="text-align: center;">${p.name}<br/>${p.periodDays} Earth days<br/>${distanceAU.toFixed(2)} AU</div>`;
+    const speedMph = getSpeedMph(p.body, now);
+    const tooltipContent = `<div style="text-align: center;">${p.name}<br/>${p.periodDays} Earth days<br/>${distanceAU.toFixed(2)} AU<br/>${Math.round(speedMph).toLocaleString()} mph</div>`;
 
     marker.bindTooltip(tooltipContent, {
       permanent: true,

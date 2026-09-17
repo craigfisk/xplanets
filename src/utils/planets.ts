@@ -1,4 +1,4 @@
-import { HelioVector, Body, MakeTime } from 'astronomy-engine';
+import { HelioVector, HelioState, Body, MakeTime } from 'astronomy-engine';
 
 export interface Planet {
   id: string;
@@ -73,4 +73,26 @@ export function getOrbitPath(body: Body, periodDays: number, date: Date = new Da
     path.push(getCurrentPosition(body, t));
   }
   return path;
+}
+
+/**
+ * Calculates current orbital speed in mph for a given celestial body
+ */
+export function getSpeedMph(body: Body, date: Date = new Date()): number {
+  const time = MakeTime(date);
+  const state = HelioState(body, time);
+  
+  // Velocity components in AU/day
+  const vx = state.vx;
+  const vy = state.vy;
+  const vz = state.vz;
+  
+  const speedAuPerDay = Math.sqrt(vx * vx + vy * vy + vz * vz);
+  
+  // 1 AU = 92,955,807.273 miles
+  // 1 day = 24 hours
+  const AU_TO_MILES = 92955807.273;
+  const HOURS_PER_DAY = 24;
+  
+  return (speedAuPerDay * AU_TO_MILES) / HOURS_PER_DAY;
 }
